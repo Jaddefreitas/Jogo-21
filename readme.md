@@ -1,6 +1,6 @@
-###Jogo 21
+### Jogo 21
 
-####Como funciona?
+#### Como funciona?
 
 O **Jogo 21** é um jogo de cartas, multiplayer, que seu principal objetivo é que o jogador consiga chegar
 o mais próximo do número 21, sendo este, o ganhador do jogo. As regras são as seguintes:
