@@ -1,5 +1,6 @@
 {
     "name": "jaddefreitas/jogo-21",
+    "version": "0.1.0",
     "description": "Jogo utilizando socket para a matéria de Redes de Computadores",
     "type": "project",
     "require": {
