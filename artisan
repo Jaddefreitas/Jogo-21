@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Core\Core;
+use App\Environment\AppEnvironment;
+
+// Pega a instância básica, coração do sistema
+$core = new Core;
+$core->load();
+
+// Pega apenas os parâmetros que vêm após o nome do arquivo
+$args = array_slice($argv, 1);
+
+// Se não houver argumentos, passa o comando de ajuda
+if (count($args) === 0) {
+    $args[0] = 'ajuda';
+}
+
+switch ($args[0]) {
+    case 'serve':
+        require __DIR__ . '/public/index.php';
+        break;
+
+    default:
+        fwrite(STDOUT, sprintf("%s %s\n\n", AppEnvironment::$name, AppEnvironment::$version));
+        fwrite(STDOUT, sprintf("Uso: comando [opcoes] [argumentos]\n\n"));
+        fwrite(STDOUT, sprintf("Comandos disponiveis:\n"));
+        fwrite(STDOUT, sprintf("  serve             Inicia um novo servidor\n"));
+        fwrite(STDOUT, sprintf("  ajuda             Exibe esta mensagem de ajuda\n"));
+        break;
+}
