@@ -26,13 +26,24 @@ abstract class AStorage
     abstract public static function indexPorObjeto($object);
 
     /**
+     * Retorna o índice após efetuar o cast correto
+     * 
+     * @param mixed $index
+     * @return mixed
+     */
+    public static function castIndex($index)
+    {
+        return $index;
+    }
+
+    /**
      * Retorna todos os dados existentes
      * 
      * @return array
      */
     public static function get(): array
     {
-        return self::$data;
+        return static::$data;
     }
 
     /**
@@ -43,7 +54,7 @@ abstract class AStorage
      */
     public static function add($object): void
     {
-        self::$data[static::indexPorObjeto($object)] = $object;
+        static::$data[static::indexPorObjeto($object)] = $object;
     }
 
     /**
@@ -54,8 +65,8 @@ abstract class AStorage
      */
     public static function remove($index): void
     {
-        if (array_key_exists($index, self::$data)) {
-            unset(self::$data[$index]);
+        if (array_key_exists(static::castIndex($index), static::$data)) {
+            unset(static::$data[static::castIndex($index)]);
         }
     }
 
@@ -67,6 +78,6 @@ abstract class AStorage
      */
     public static function find($index)
     {
-        return array_key_exists($index, self::$data) ? self::$data[$index] : null;
+        return array_key_exists(static::castIndex($index), static::$data) ? static::$data[static::castIndex($index)] : null;
     }
 }

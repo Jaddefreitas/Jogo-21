@@ -11,8 +11,15 @@ use App\Storage\AStorage;
  */
 class SalasStorage extends AStorage
 {
+    public static array $data = [];
+
     public static function indexPorObjeto($object)
     {
         return (string) $object->codigo;
+    }
+
+    public static function castIndex($index)
+    {
+        return (string) $index;
     }
 }

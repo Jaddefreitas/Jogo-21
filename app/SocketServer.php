@@ -3,10 +3,16 @@
 namespace App;
 
 use ErrorException;
+use App\Evento\Request;
+use App\Evento\Response;
 use Core\Contract\IServer;
+use App\Evento\RequestHandle;
+use App\Evento\ResponseHandle;
+use App\Evento\Status\FStatus;
 use App\Service\JogadorService;
 use App\Storage\JogadoresStorage;
 use App\Environment\AppEnvironment;
+use App\Evento\Status\InternalServerErrorStatus;
 
 /**
  * Socket Server
@@ -87,8 +93,23 @@ class SocketServer implements IServer
             // Se o jogador não for encontrado, pula para a próxima iteração
             if ($jogador === null) continue;
 
-            // Armazena os dados no buffer do jogador
-            $jogador->buffer = fread($stream, 4096);
+            // Constrói o objeto de requisição e despacha o evento. Caso a requisicao seja
+            // inválida, responde ao cliente o erro
+            try {
+                $request = Request::constructBySocketData(fread($stream, 4096));
+
+                $request->jogador = $jogador;
+
+                RequestHandle::dispatch($request);
+            } catch (\Throwable $th) {
+                $response = new Response;
+
+                $response->jogador = $jogador;
+                $response->tipo = FStatus::constructByInt($th->getCode()) ?? new InternalServerErrorStatus;
+                $response->payload = (string) $th->getMessage();
+
+                ResponseHandle::dispatch($response);
+            }
         }
     }
 
@@ -112,7 +133,7 @@ class SocketServer implements IServer
             // do mesmo
             if (strlen($jogador->buffer) > 0) {
                 // Despacha para o cliente o que está no buffer
-                $bytesWritten = fwrite($stream, "Server says: {$jogador->buffer}", 2048);
+                $bytesWritten = fwrite($stream, (string) $jogador->buffer, 2048);
 
                 // Remove do buffer a parte escrita;
                 $jogador->buffer = substr($jogador->buffer, $bytesWritten);

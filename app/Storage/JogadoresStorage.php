@@ -11,8 +11,15 @@ use App\Storage\AStorage;
  */
 class JogadoresStorage extends AStorage
 {
+    public static array $data = [];
+
     public static function indexPorObjeto($object)
     {
         return (int) $object->stream;
+    }
+
+    public static function castIndex($index)
+    {
+        return (int) $index;
     }
 }
