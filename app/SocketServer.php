@@ -82,13 +82,13 @@ class SocketServer implements IServer
             }
 
             // Localiza o jogador pelo stream
-            $jogador = JogadoresStorage::find($stream);
+            $jogador = JogadoresStorage::find((int) $stream);
 
             // Se o jogador não for encontrado, pula para a próxima iteração
             if ($jogador === null) continue;
 
             // Armazena os dados no buffer do jogador
-            $jogador->buffer .= fread($stream, 4096);
+            $jogador->buffer = fread($stream, 4096);
         }
     }
 
@@ -103,7 +103,7 @@ class SocketServer implements IServer
     {
         foreach ($streams as $stream) {
             // Localiza o jogador pela sua conexão
-            $jogador = JogadoresStorage::find($stream);
+            $jogador = JogadoresStorage::find((int) $stream);
 
             // Se o jogador não for encontrado, pula para a próxima iteração
             if ($jogador === null) continue;
@@ -135,8 +135,8 @@ class SocketServer implements IServer
             // (end-of-file), precisando ser fechada e o jogador limpado do Storage
             if (feof($stream)) {
                 fwrite(STDERR, sprintf("Jogador [%s] foi desconectado; \n", stream_socket_get_name($stream, true)));
+                JogadoresStorage::remove((int) $stream);
                 fclose($stream);
-                JogadoresStorage::remove($stream);
             }
         }
     }
