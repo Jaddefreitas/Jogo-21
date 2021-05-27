@@ -20,6 +20,5 @@ class Dotenv
 
         // Carrega os arquivos de configuração do sistema
         AppEnvironment::load();
-        SocketEnvironment::load();
     }
 }

@@ -27,7 +27,7 @@ class ResponseHandle
             throw new ErrorException("Resposta invalida. Verifique o objeto submetido e tente novamente", StatusCode::STATUS_INTERNAL_SERVER_ERROR);
         }
 
-        // Armazena os dados no buffer do jogador
-        $response->jogador->buffer .= $response->toJson();
+        // Submete os dados a partir da conexão do jogador
+        $response->jogador->conn->send($response->toJson());
     }
 }

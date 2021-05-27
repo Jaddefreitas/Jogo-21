@@ -3,7 +3,7 @@
 namespace Core;
 
 use Core\Provider\Dotenv;
-use Core\Contract\IServer;
+use Ratchet\Server\IoServer;
 
 /**
  * Coração do sistema. Carrega tudo que for preciso inicialmente
@@ -27,10 +27,10 @@ class Core
     /**
      * Executa o servidor socket passado via parâmetro
      * 
-     * @param  \Core\Contract\IServer $server
+     * @param  \Ratchet\Server\IoServer $server
      * @return void
      */
-    public function run(IServer $server)
+    public function run(IoServer $server)
     {
         try {
             $server->run();

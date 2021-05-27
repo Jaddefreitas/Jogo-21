@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Core\Contract\Arrayable;
+use Ratchet\ConnectionInterface;
 
 /**
  * Jogador Model
@@ -11,8 +12,7 @@ use Core\Contract\Arrayable;
  */
 class JogadorModel implements Arrayable
 {
-    public $stream;
-    public string $buffer = "";
+    public ConnectionInterface $conn;
     public string $identificador = "";
     public string $nome = "";
     public array $cartas = [];

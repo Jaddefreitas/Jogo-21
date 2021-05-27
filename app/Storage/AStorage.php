@@ -2,82 +2,22 @@
 
 namespace App\Storage;
 
+use App\Storage\TCallStaticStorage;
+
 /**
- * Storage abstrato, que implementa boa parte dos comandos básicos de todo storage
+ * Storage abstrato, que implementa o singleton dos storages. Recomenda-se a chamada do trait
+ * TCallStaticStorage ao extende-lo
  */
 abstract class AStorage
 {
-    /**
-     * @var array Todos os dados guardados
-     */
-    public static array $data = [];
-
-    final private function __construct()
-    {
-        // não faz nada
-    }
+    use TCallStaticStorage;
 
     /**
-     * Retorna um índice a partir do objeto passado
+     * Busca um valor por seu indice, a partir de uma operação personalizada para cada storage. Se
+     * não encontrar um valor, retorna nulo
      * 
-     * @param  mixed $object
-     * @return string
-     */
-    abstract public static function indexPorObjeto($object);
-
-    /**
-     * Retorna o índice após efetuar o cast correto
-     * 
-     * @param mixed $index
+     * @param  mixed $index Indice utilizado para busca
      * @return mixed
      */
-    public static function castIndex($index)
-    {
-        return $index;
-    }
-
-    /**
-     * Retorna todos os dados existentes
-     * 
-     * @return array
-     */
-    public static function get(): array
-    {
-        return static::$data;
-    }
-
-    /**
-     * Adiciona um novo dado. Faz uso de um índice pré-estabelecido
-     * 
-     * @param  mixed $object
-     * @return void
-     */
-    public static function add($object): void
-    {
-        static::$data[static::indexPorObjeto($object)] = $object;
-    }
-
-    /**
-     * Remove um dado a partir de seu índice
-     * 
-     * @param  mixed $index
-     * @return void
-     */
-    public static function remove($index): void
-    {
-        if (array_key_exists(static::castIndex($index), static::$data)) {
-            unset(static::$data[static::castIndex($index)]);
-        }
-    }
-
-    /**
-     * Procura um dado pelo seu índice. Caso não seja encontrado, retorna nulo
-     * 
-     * @param  mixed $index 
-     * @return mixed|null
-     */
-    public static function find($index)
-    {
-        return array_key_exists(static::castIndex($index), static::$data) ? static::$data[static::castIndex($index)] : null;
-    }
+    abstract public static function find($index);
 }

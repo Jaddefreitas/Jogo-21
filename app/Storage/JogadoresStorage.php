@@ -3,6 +3,7 @@
 namespace App\Storage;
 
 use App\Storage\AStorage;
+use App\Storage\TCallStaticStorage;
 
 /**
  * Jogadores Storage
@@ -11,15 +12,22 @@ use App\Storage\AStorage;
  */
 class JogadoresStorage extends AStorage
 {
-    public static array $data = [];
+    use TCallStaticStorage;
 
-    public static function indexPorObjeto($object)
+    public static function find($index)
     {
-        return (int) $object->stream;
-    }
+        $storage = static::$storage;
 
-    public static function castIndex($index)
-    {
-        return (int) $index;
+        while ($storage->valid()) {
+            if (spl_object_hash($storage->current()->conn) === spl_object_hash($index)) {
+                $object = $storage->current();
+                $storage->rewind();
+                return $object;
+            }
+
+            $storage->next();
+        }
+
+        return null;
     }
 }

@@ -6,6 +6,7 @@ use stdClass;
 use App\Util\Json;
 use ErrorException;
 use App\Model\JogadorModel;
+use Ratchet\ConnectionInterface;
 use App\Evento\Status\StatusCode;
 
 /**
@@ -48,11 +49,11 @@ class Request
      * Constrói o objeto a partir dos dados submetidos via socket. Se os dados submetidos não
      * forem válidos, notifica uma exceção
      * 
-     * @param  string $data Dados passados via socket
+     * @param  mixed $data Dados submetidos 
      * @return \App\Evento\Request
      * @throws \ErrorException
      */
-    public static function constructBySocketData(string $data)
+    public static function constructByMessage(string $data)
     {
         // Verifica se o dado é um json
         if (!Json::isJson($data)) {

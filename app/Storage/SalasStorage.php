@@ -3,6 +3,7 @@
 namespace App\Storage;
 
 use App\Storage\AStorage;
+use App\Storage\TCallStaticStorage;
 
 /**
  * Salas Storage
@@ -11,15 +12,22 @@ use App\Storage\AStorage;
  */
 class SalasStorage extends AStorage
 {
-    public static array $data = [];
+    use TCallStaticStorage;
 
-    public static function indexPorObjeto($object)
+    public static function find($index)
     {
-        return (string) $object->codigo;
-    }
+        $storage = static::$storage;
 
-    public static function castIndex($index)
-    {
-        return (string) $index;
+        while ($storage->valid()) {
+            if ($storage->current()->codigo === $index) {
+                $object = $storage->current();
+                $storage->rewind();
+                return $object;
+            }
+
+            $storage->next();
+        }
+
+        return null;
     }
 }

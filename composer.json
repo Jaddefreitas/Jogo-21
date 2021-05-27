@@ -4,7 +4,8 @@
     "description": "Jogo utilizando socket para a matéria de Redes de Computadores",
     "type": "project",
     "require": {
-        "vlucas/phpdotenv": "^5.3"
+        "vlucas/phpdotenv": "^5.3",
+        "cboden/ratchet": "^0.4.3"
     },
     "authors": [
         {

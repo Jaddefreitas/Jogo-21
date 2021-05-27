@@ -33,7 +33,7 @@ class SalaService
         $sala->codigo = self::_criarCodigoDaSala();
 
         // Guarda a sala no Storage
-        SalasStorage::add($sala);
+        SalasStorage::attach($sala);
 
         return $sala;
     }
@@ -85,7 +85,7 @@ class SalaService
         foreach ($sala->jogadores as $jogador) {
             $response = new Response;
 
-            $response->jogador = JogadoresStorage::find($jogador->stream);
+            $response->jogador = JogadoresStorage::find($jogador->conn);
             $response->tipo = new SalaUpdateStatus;
             $response->payload = $sala;
 

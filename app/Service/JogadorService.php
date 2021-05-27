@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Model\JogadorModel;
+use Ratchet\ConnectionInterface;
 use App\Storage\JogadoresStorage;
 
 /**
@@ -14,23 +15,23 @@ use App\Storage\JogadoresStorage;
 class JogadorService
 {
     /**
-     * Cria um novo jogador vinculado ao stream dele. Retorna um novo modelo de jogador, após
+     * Cria um novo jogador vinculado a conexão dele. Retorna um novo modelo de jogador, após
      * guarda-lo no Storage
      * 
-     * @param resource $stream
+     * @param \Ratchet\ConnectionInterface $conn
      * @return \App\Model\JogadorModel
      */
-    public static function conectar($stream)
+    public static function conectar(ConnectionInterface $conn)
     {
         // Cria a nova instância do modelo de jogador
         $jogador = new JogadorModel;
 
-        $jogador->stream = $stream;
+        $jogador->conn = $conn;
         $jogador->identificador = self::_criarIdentificadorDoJogador();
         $jogador->icone = self::_sortearIcone();
 
         // Guarda o jogador no Storage
-        JogadoresStorage::add($jogador);
+        JogadoresStorage::attach($jogador);
 
         return $jogador;
     }
