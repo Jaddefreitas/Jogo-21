@@ -26,4 +26,13 @@ trait TCallStaticStorage
 
         return $storage->$name(...$arguments);
     }
+
+    public static function getStorage()
+    {
+        if (!isset(static::$storage)) {
+            static::$storage = new SplObjectStorage();
+        }
+
+        return static::$storage;
+    }
 }

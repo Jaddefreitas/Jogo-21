@@ -28,6 +28,21 @@ class Response
     public $payload;
 
     /**
+     * @var string Hash, em base_64, que identifica a mensagem
+     */
+    public $hash;
+
+    /**
+     * Constrói a resposta com a hash estabelecida
+     * 
+     * @return \App\Evento\Response
+     */
+    public function __construct()
+    {
+        $this->hash = (string) base64_encode(substr((str_pad(rand(1, getrandmax()), 7, '0', STR_PAD_LEFT)), 0, 7));
+    }
+
+    /**
      * Verifica se o objeto de resposta é válido
      * 
      * @return bool
@@ -37,6 +52,7 @@ class Response
         if (!isset($this->jogador)) return false;
         if (!isset($this->tipo)) return false;
         if (!isset($this->payload)) return false;
+        if (!isset($this->hash)) return false;
 
         return true;
     }
@@ -51,10 +67,11 @@ class Response
         if (!$this->isValid()) return null;
 
         return json_encode([
-            'event' => $this->tipo->toString(),
+            'event' => (string) $this->tipo->toString(),
             'payload' => ($this->payload instanceof Arrayable) ?
                 $this->payload->toArray() :
-                $this->payload
+                $this->payload,
+            'hash' => (string) $this->hash
         ]);
     }
 }

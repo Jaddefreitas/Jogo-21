@@ -11,6 +11,8 @@ use App\Evento\ResponseHandle;
 use App\Evento\Status\StatusCode;
 use App\Storage\JogadoresStorage;
 use App\Evento\Status\SalaUpdateStatus;
+use App\Util\Arr;
+use App\Util\Number;
 
 /**
  * Sala Service
@@ -21,16 +23,18 @@ use App\Evento\Status\SalaUpdateStatus;
 class SalaService
 {
     /**
-     * Cria uma nova sala de jogo. Em seguida, registra a sala de jogo no Storage e retorna-a
+     * Cria uma nova sala de jogo. Em seguida, registra a sala de jogo no Storage e retorna-a. Se
+     * desejado, pode receber o código de sala previamente
      * 
+     * @param  ?string $codigo Codigo da sala
      * @return \App\Model\SalaModel
      */
-    public static function criar()
+    public static function criar(?string $codigo = null): SalaModel
     {
         // Cria a nova instância do modelo de sala
         $sala = new SalaModel;
 
-        $sala->codigo = self::_criarCodigoDaSala();
+        $sala->codigo = $codigo ?? self::_criarCodigoDaSala();
 
         // Guarda a sala no Storage
         SalasStorage::attach($sala);
@@ -60,10 +64,10 @@ class SalaService
         }
 
         // Estabelece a posição do jogador na sala
-        $jogador->posicao = count($sala->jogadores) + 1;
+        $jogador->posicao = Number::toString(count($sala->jogadores) + 1);
 
         // Adiciona o jogador à lista de jogadores da sala
-        $sala->jogadores[] = $jogador;
+        $sala->jogadores[$jogador->posicao] = $jogador;
 
         // Registra o jogador como presente naquela sala
         $jogador->sala = $sala;
@@ -83,6 +87,9 @@ class SalaService
         // Para cada jogador na sala, cria um objeto de resposta com os dados da sala e submete a
         // ele
         foreach ($sala->jogadores as $jogador) {
+            // Formata a lista de jogadores para um padrão reconhecível
+            $sala->jogadores = $sala->jogadores;
+
             $response = new Response;
 
             $response->jogador = JogadoresStorage::find($jogador->conn);

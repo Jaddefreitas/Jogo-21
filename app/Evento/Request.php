@@ -32,6 +32,11 @@ class Request
     public $payload;
 
     /**
+     * @var string Hash, em base_64, que identifica a mensagem
+     */
+    public $hash;
+
+    /**
      * Verifica se o objeto de requisição é válido
      * 
      * @return bool
@@ -41,6 +46,7 @@ class Request
         if (!isset($this->jogador)) return false;
         if (!isset($this->evento)) return false;
         if (!isset($this->payload)) return false;
+        if (!isset($this->hash)) return false;
 
         return true;
     }
@@ -73,6 +79,7 @@ class Request
 
         $request->evento = (string) $json->event;
         $request->payload = $json->payload;
+        $request->hash = (string) $json->hash;
 
         return $request;
     }
@@ -86,6 +93,6 @@ class Request
      */
     private static function _JsonObjectIsValid(stdClass $json)
     {
-        return isset($json->event) && isset($json->payload);
+        return isset($json->event) && isset($json->payload) && isset($json->hash);
     }
 }

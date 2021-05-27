@@ -12,6 +12,7 @@ use App\Service\JogadorService;
 use Ratchet\ConnectionInterface;
 use App\Storage\JogadoresStorage;
 use Ratchet\MessageComponentInterface;
+use App\Evento\Status\JogadorCriarStatus;
 use App\Evento\Status\InternalServerErrorStatus;
 
 class SocketServer implements MessageComponentInterface
@@ -20,7 +21,11 @@ class SocketServer implements MessageComponentInterface
     {
         fwrite(STDERR, sprintf("Jogador [%s] conectou-se; \n", $conn->resourceId));
 
-        JogadorService::conectar($conn);
+        // Conecta o jogador ao sistema
+        $jogador = JogadorService::conectar($conn);
+
+        // Notifica-o dos seus dados
+        JogadorService::notificarJogador($jogador, new JogadorCriarStatus);
     }
 
     public function onMessage(ConnectionInterface $from, $msg)

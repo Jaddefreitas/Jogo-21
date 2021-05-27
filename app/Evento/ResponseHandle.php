@@ -27,6 +27,8 @@ class ResponseHandle
             throw new ErrorException("Resposta invalida. Verifique o objeto submetido e tente novamente", StatusCode::STATUS_INTERNAL_SERVER_ERROR);
         }
 
+        fwrite(STDERR, sprintf("Mensagem para [%s]: %s %s\n", $response->jogador->conn->resourceId, $response->tipo->toString(), $response->hash));
+
         // Submete os dados a partir da conexão do jogador
         $response->jogador->conn->send($response->toJson());
     }

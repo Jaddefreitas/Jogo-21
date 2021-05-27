@@ -16,7 +16,7 @@ class SalasStorage extends AStorage
 
     public static function find($index)
     {
-        $storage = static::$storage;
+        $storage = static::getStorage();
 
         while ($storage->valid()) {
             if ($storage->current()->codigo === $index) {

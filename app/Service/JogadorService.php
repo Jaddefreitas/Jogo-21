@@ -2,7 +2,10 @@
 
 namespace App\Service;
 
+use App\Evento\Response;
 use App\Model\JogadorModel;
+use App\Evento\ResponseHandle;
+use App\Evento\Status\IStatus;
 use Ratchet\ConnectionInterface;
 use App\Storage\JogadoresStorage;
 
@@ -21,7 +24,7 @@ class JogadorService
      * @param \Ratchet\ConnectionInterface $conn
      * @return \App\Model\JogadorModel
      */
-    public static function conectar(ConnectionInterface $conn)
+    public static function conectar(ConnectionInterface $conn): JogadorModel
     {
         // Cria a nova instância do modelo de jogador
         $jogador = new JogadorModel;
@@ -34,6 +37,25 @@ class JogadorService
         JogadoresStorage::attach($jogador);
 
         return $jogador;
+    }
+
+    /**
+     * Notifica um jogador das atualizações nos dados dele, informando qual o evento realizado
+     * 
+     * @param  \App\Model\JogadorModel $jogador
+     * @param  \App\Evento\Status\IStatus
+     * @return void
+     */
+    public static function notificarJogador(JogadorModel $jogador, IStatus $tipo): void
+    {
+        // Constrói o objeto a ser submetido
+        $response = new Response;
+
+        $response->jogador = $jogador;
+        $response->tipo = $tipo;
+        $response->payload = $jogador;
+
+        ResponseHandle::dispatch($response);
     }
 
     /**

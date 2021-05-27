@@ -3,9 +3,11 @@
 namespace App\Evento\Comandos;
 
 use App\Evento\Request;
-use App\Evento\Comandos\IEvento;
 use App\Service\SalaService;
 use App\Storage\SalasStorage;
+use App\Service\JogadorService;
+use App\Evento\Comandos\IEvento;
+use App\Evento\Status\JogadorAtualizarStatus;
 
 /**
  * Conecta um jogador à sala a partir do código submetido
@@ -22,11 +24,14 @@ class ConectarNaSalaEvento implements IEvento
 
         // Se a sala não existir, cria-a
         if ($sala === null) {
-            $sala = SalaService::criar();
+            $sala = SalaService::criar($codigo);
         }
 
         // Adiciona o jogador na sala
-        SalaService::adicionarJogador($sala, $request->jogador);
+        $sala = SalaService::adicionarJogador($sala, $request->jogador);
+
+        // Notifica o próprio jogador das atualizações nos seus dados
+        JogadorService::notificarJogador($request->jogador, new JogadorAtualizarStatus);
 
         // Notifica os jogadores da atualização na sala
         SalaService::notificarJogadores($sala);

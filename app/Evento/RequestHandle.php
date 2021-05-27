@@ -41,6 +41,8 @@ class RequestHandle
             throw new ErrorException("Evento invalido. Verifique o evento requisitado e tente novamente", StatusCode::STATUS_NOT_FOUND);
         }
 
+        fwrite(STDERR, sprintf("Mensagem de [%s]: %s %s\n", $request->jogador->conn->resourceId, $request->evento, $request->hash));
+
         // Executa o evento requisitado
         (self::$eventos[$request->evento])::run($request);
     }

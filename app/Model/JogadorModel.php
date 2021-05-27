@@ -17,9 +17,9 @@ class JogadorModel implements Arrayable
     public string $nome = "";
     public array $cartas = [];
     public bool $iniciar = false;
-    public int $posicao = 0;
+    public string $posicao = "";
     public string $icone = "";
-    public SalaModel $sala;
+    public ?SalaModel $sala = null;
 
     public function toArray(): array
     {
@@ -28,7 +28,7 @@ class JogadorModel implements Arrayable
             'nome' => (string) $this->nome,
             'cartas' => $this->cartas,
             'iniciar' => (bool) $this->iniciar,
-            'posicao' => (int) $this->posicao,
+            'posicao' => (string) $this->posicao,
             'icone' => (string) $this->icone
         ];
     }

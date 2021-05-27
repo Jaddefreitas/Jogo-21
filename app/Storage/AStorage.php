@@ -10,8 +10,6 @@ use App\Storage\TCallStaticStorage;
  */
 abstract class AStorage
 {
-    use TCallStaticStorage;
-
     /**
      * Busca um valor por seu indice, a partir de uma operação personalizada para cada storage. Se
      * não encontrar um valor, retorna nulo

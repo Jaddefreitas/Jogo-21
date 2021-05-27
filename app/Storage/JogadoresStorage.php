@@ -16,7 +16,7 @@ class JogadoresStorage extends AStorage
 
     public static function find($index)
     {
-        $storage = static::$storage;
+        $storage = static::getStorage();
 
         while ($storage->valid()) {
             if (spl_object_hash($storage->current()->conn) === spl_object_hash($index)) {

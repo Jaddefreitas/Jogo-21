@@ -22,8 +22,8 @@ class SalaModel implements Arrayable
             'situacao' => (string) $this->situacao,
         ];
 
-        foreach ($this->jogadores as $jogador) {
-            $array['jogadores'][] = $jogador->toArray();
+        foreach ($this->jogadores as $posicao => $jogador) {
+            $array['jogadores'][$posicao] = $jogador->toArray();
         }
 
         return $array;
