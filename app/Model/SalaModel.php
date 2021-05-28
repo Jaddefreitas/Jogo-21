@@ -12,7 +12,7 @@ use Core\Contract\Arrayable;
 class SalaModel implements Arrayable
 {
     public string $codigo;
-    public string $situacao = "";
+    public string $situacao = "aguardando jogadores";
     public array $jogadores = [];
 
     public function toArray(): array

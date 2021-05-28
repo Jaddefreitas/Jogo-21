@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use Core\Contract\Arrayable;
+use DateTime;
+use DateTimeInterface;
 use Ratchet\ConnectionInterface;
 
 /**
@@ -13,6 +15,7 @@ use Ratchet\ConnectionInterface;
 class JogadorModel implements Arrayable
 {
     public ConnectionInterface $conn;
+    public DateTimeInterface $last_modified;
     public string $identificador = "";
     public string $nome = "";
     public array $cartas = [];
@@ -20,6 +23,11 @@ class JogadorModel implements Arrayable
     public string $posicao = "";
     public string $icone = "";
     public ?SalaModel $sala = null;
+
+    public function __construct()
+    {
+        $this->last_modified = new DateTime();
+    }
 
     public function toArray(): array
     {

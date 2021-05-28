@@ -14,6 +14,7 @@ use App\Storage\JogadoresStorage;
 use Ratchet\MessageComponentInterface;
 use App\Evento\Status\JogadorCriarStatus;
 use App\Evento\Status\InternalServerErrorStatus;
+use DateTime;
 
 class SocketServer implements MessageComponentInterface
 {
@@ -35,6 +36,9 @@ class SocketServer implements MessageComponentInterface
 
         // Se o jogador não for encontrado, pula a iteração
         if ($jogador === null) return;
+
+        // Atualiza a data da última modificação
+        $jogador->last_modified = new DateTime();
 
         // Constrói o objeto de requisição e despacha o evento. Caso a requisicao seja
         // inválida, responde ao cliente o erro
